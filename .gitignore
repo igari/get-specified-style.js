@@ -1,0 +1,7 @@
+node_modules
+Thumbs.db
+.DS_Store
+zip.command
+.idea
+*.iml
+npm-debug.log
