@@ -75,15 +75,14 @@ const GSS = {
 
 			for(let specificityObj of specificityObjArray) {
 
-				let regex = new RegExp('(.*)::(' + this.pseudo + ')');
+				let regex = new RegExp('(.*)::' + this.pseudo);
 				let hasPseudoSelector = specificityObj.selector.match(regex);
 				let selector = hasPseudoSelector ? hasPseudoSelector[1] : specificityObj.selector;
-				let pseudo = hasPseudoSelector ? hasPseudoSelector[2] : undefined;
 
 				if(this.element.matches(selector)) {
 					let specificity = +specificityObj.specificity.replace(/,/g, '');
 					let styleFromStyleAttr = this.element.style;
-					this.getStyle(styleFromCSSRule, specificity, pseudo);
+					this.getStyle(styleFromCSSRule, specificity);
 					if(!hasPseudoSelector) {
 						this.getStyle(styleFromStyleAttr, false);
 					}
@@ -91,7 +90,7 @@ const GSS = {
 			}
 		}
 	},
-	getStyle: function (style, specificity, pseudo) {
+	getStyle: function (style, specificity) {
 
 		for(let property of style) {
 
@@ -99,20 +98,20 @@ const GSS = {
 			let priority = style.getPropertyPriority(property);
 			let isFromCSSRule = specificity !== false;
 			specificity = isFromCSSRule ? (priority ? specificity + 1000 : specificity) : (priority ? 10000 : 1000);
-			this.saveStyle2Element(element, property, value, priority, specificity, pseudo);
+			this.saveStyle2Element(property, value, priority, specificity);
 
 		}
 
 	},
-	saveStyle2Element: function(element, property, value, priority, specificity, pseudo) {
+	saveStyle2Element: function(property, value, priority, specificity) {
 
 		this.element.xstyle[property] = this.element.xstyle[property] || {};
 
 		let customStyle = this.element.xstyle[property];
 
-		if(pseudo) {
-			this.element.xstyle[pseudo][property] = this.element.xstyle[pseudo][property] || {};
-			customStyle = this.element.xstyle[pseudo][property];
+		if(this.pseudo) {
+			this.element.xstyle[this.pseudo][property] = this.element.xstyle[this.pseudo][property] || {};
+			customStyle = this.element.xstyle[this.pseudo][property];
 		}
 
 		let hasProperty = Object.keys(customStyle).length > 0;
