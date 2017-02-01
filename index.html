@@ -8,11 +8,16 @@
 		#test {
 			background: red;
 		}
+		.nav::before {
+			content: 'hoge';
+			display: inherit;
+		}
 	</style>
 	<link rel="stylesheet" href="./index.css">
 </head>
 <body>
 	<div>Element</div>
+	<nav class="nav">nav</nav>
 	<table>
 		<tr>
 			<th>th</th>

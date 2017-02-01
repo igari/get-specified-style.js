@@ -1,6 +1,6 @@
 {
   "name": "get-specified-style.js",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "An API instead of getComputedStyle which is able to get spedified value NOT culuculated value.",
   "main": "./dist/get-specified-style.js",
   "directories": {
