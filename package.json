@@ -1,13 +1,14 @@
 {
   "name": "get-applied-style.js",
   "version": "1.0.0",
-  "description": "",
-  "main": "get-applied-style.js",
+  "description": "An API instead of getComputedStyle which is able to get spedified value NOT culuculated value.",
+  "main": "./dist/get-applied-style.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha ./test/index.js"
+    "test": "mocha ./test/index.js",
+    "build": "./node_modules/.bin/webpack ./src/ ./dist/get-specified-style.js"
   },
   "repository": {
     "type": "git",
