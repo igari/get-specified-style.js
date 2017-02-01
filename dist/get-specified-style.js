@@ -73,6 +73,8 @@
 "use strict";
 
 
+__webpack_require__(1);
+
 function XCSSStyleDeclaration() {}
 
 XCSSStyleDeclaration.prototype.getPropertyValue = function (property) {
@@ -89,7 +91,8 @@ const GSS = {
 
 	getSpecifiedStyle: function (element, pseudo) {
 
-		this.pseudo = pseudo.match(/(before|after)$/)[1];
+		let pseudoMatch = pseudo.match(/(before|after)$/);
+		this.pseudo = pseudoMatch ? pseudoMatch[1] : false;
 
 		element.xstyle = Object.create(XCSSStyleDeclaration.prototype, {});
 
@@ -451,7 +454,6 @@ if (true) {
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(1);
 __webpack_require__(0);
 
 /***/ })

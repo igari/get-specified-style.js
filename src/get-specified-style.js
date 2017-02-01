@@ -1,5 +1,7 @@
 'use strict';
 
+const SPECIFICITY = require('specificity');
+
 function XCSSStyleDeclaration() {}
 
 XCSSStyleDeclaration.prototype.getPropertyValue = function (property) {

@@ -1,6 +1,6 @@
 {
   "name": "get-specified-style.js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "An API instead of getComputedStyle which is able to get spedified value NOT culuculated value.",
   "main": "./dist/get-specified-style.js",
   "directories": {
@@ -25,5 +25,8 @@
     "selenium-standalone": "^6.0.0",
     "selenium-webdriver": "^3.0.1",
     "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "specificity": "^0.3.0"
   }
 }
