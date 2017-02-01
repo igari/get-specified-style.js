@@ -78,22 +78,20 @@ const GSS = {
 				let regex = new RegExp('(.*)::(before|after)');
 				let pseudoSelectorMatch = specificityObj.selector.trim().match(regex);
 				let selector = pseudoSelectorMatch ? pseudoSelectorMatch[1] : specificityObj.selector;
+				let pseudoSelector = pseudoSelectorMatch && pseudoSelectorMatch[2] === this.pseudo ? pseudoSelectorMatch[2] : null;
 
-				if(
-					this.element.matches(selector || '*') &&
-					pseudoSelectorMatch ? this.pseudo === pseudoSelectorMatch[2] : true
-				) {
+				if(this.element.matches(selector || '*')) {
 					let specificity = +specificityObj.specificity.replace(/,/g, '');
-					let styleFromStyleAttr = this.element.style;
-					this.getStyle(styleFromCSSRule, specificity);
-					if(!pseudoSelectorMatch) {
+					this.getStyle(styleFromCSSRule, specificity, pseudoSelector);
+					if(!pseudoSelector) {
+						let styleFromStyleAttr = this.element.style;
 						this.getStyle(styleFromStyleAttr, false);
 					}
 				}
 			}
 		}
 	},
-	getStyle: function (style, specificity) {
+	getStyle: function (style, specificity, pseudoSelector) {
 
 		for(let property of style) {
 
@@ -101,20 +99,20 @@ const GSS = {
 			let priority = style.getPropertyPriority(property);
 			let isFromCSSRule = specificity !== false;
 			specificity = isFromCSSRule ? (priority ? specificity + 1000 : specificity) : (priority ? 10000 : 1000);
-			this.saveStyle2Element(property, value, priority, specificity);
+			this.saveStyle2Element(property, value, priority, specificity, pseudoSelector);
 
 		}
 
 	},
-	saveStyle2Element: function(property, value, priority, specificity) {
+	saveStyle2Element: function(property, value, priority, specificity, pseudoSelector) {
 
 		this.element.xstyle[property] = this.element.xstyle[property] || {};
 
 		let customStyle = this.element.xstyle[property];
 
-		if(this.pseudo) {
-			this.element.xstyle[this.pseudo][property] = this.element.xstyle[this.pseudo][property] || {};
-			customStyle = this.element.xstyle[this.pseudo][property];
+		if(pseudoSelector) {
+			this.element.xstyle[pseudoSelector][property] = this.element.xstyle[pseudoSelector][property] || {};
+			customStyle = this.element.xstyle[pseudoSelector][property];
 		}
 
 		let hasProperty = Object.keys(customStyle).length > 0;
