@@ -194,7 +194,7 @@ const GSS = {
 
 		if(hasProperty) {
 
-			let isWinPrevSpecificity = specificity > customStyle.specificity;
+			let isWinPrevSpecificity = customStyle.specificity <= specificity;
 			if(isWinPrevSpecificity) {
 				this.saveCustomStyle2Element(customStyle, value, priority, specificity);
 			}
