@@ -80,7 +80,7 @@ const GSS = {
 				let selector = hasPseudoSelector ? hasPseudoSelector[1] : specificityObj.selector;
 				let pseudo = hasPseudoSelector ? hasPseudoSelector[2] : undefined;
 
-				if(element.matches(selector)) {
+				if(this.element.matches(selector)) {
 					let specificity = +specificityObj.specificity.replace(/,/g, '');
 					let styleFromStyleAttr = this.element.style;
 					this.getStyle(styleFromCSSRule, specificity, pseudo);
