@@ -5,13 +5,13 @@ const SPECIFICITY = require('specificity');
 function XCSSStyleDeclaration() {}
 
 XCSSStyleDeclaration.prototype.getPropertyValue = function (property) {
-	return this[property].value;
+	return this[property] ? this[property].value : null;
 };
 XCSSStyleDeclaration.prototype.getSpecificity = function (property) {
-	return this[property].specificity;
+	return this[property] ? this[property].specificity : null;
 };
 XCSSStyleDeclaration.prototype.getPropertyPriority = function (property) {
-	return this[property].priority;
+	return this[property] ? this[property].priority : null;
 };
 
 const GSS = {
@@ -75,15 +75,18 @@ const GSS = {
 
 			for(let specificityObj of specificityObjArray) {
 
-				let regex = new RegExp('(.*)::' + this.pseudo);
-				let hasPseudoSelector = specificityObj.selector.match(regex);
-				let selector = hasPseudoSelector ? hasPseudoSelector[1] : specificityObj.selector;
+				let regex = new RegExp('(.*)::(before|after)');
+				let pseudoSelectorMatch = specificityObj.selector.trim().match(regex);
+				let selector = pseudoSelectorMatch ? pseudoSelectorMatch[1] : specificityObj.selector;
 
-				if(this.element.matches(selector)) {
+				if(
+					this.element.matches(selector || '*') &&
+					pseudoSelectorMatch ? this.pseudo === pseudoSelectorMatch[2] : true
+				) {
 					let specificity = +specificityObj.specificity.replace(/,/g, '');
 					let styleFromStyleAttr = this.element.style;
 					this.getStyle(styleFromCSSRule, specificity);
-					if(!hasPseudoSelector) {
+					if(!pseudoSelectorMatch) {
 						this.getStyle(styleFromStyleAttr, false);
 					}
 				}
