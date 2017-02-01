@@ -1,5 +1,21 @@
 @charset "utf-8";
 
+@media (max-width: 2000px) {
+	div {
+		width: 400px !important;
+	}
+}
 div {
 	width: 100px;
+}
+div::before {
+	content: 'hoge';
+	width: auto;
+	background: blue;
+}
+
+@supports (display: flex) {
+	div {
+		display: flex;
+	}
 }

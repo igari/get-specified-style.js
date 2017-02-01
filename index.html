@@ -4,16 +4,23 @@
 	<meta charset="UTF-8">
 	<title>Test Page</title>
 	<style>
-		div {
+		div,
+		#test {
 			background: red;
-			width: 200px !important;
 		}
 	</style>
 	<link rel="stylesheet" href="./index.css">
 </head>
 <body>
-	<div style="width: 300px !important;">Element</div>
-	<script src="./get-applied-style.js"></script>
+	<div>Element</div>
+	<table>
+		<tr>
+			<th>th</th>
+			<td>td</td>
+		</tr>
+	</table>
+	<script src="./specificity.js"></script>
+	<script src="./get-specified-style.js"></script>
 	<script src="./index.js"></script>
 </body>
 </html>

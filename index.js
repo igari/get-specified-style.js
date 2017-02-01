@@ -1,10 +1,8 @@
 'use strict';
 
 var element = document.querySelector('div');
-var style = getAppliedStyle(element);
-var style2 = getComputedStyle(element);
+var spedifiedStyle = getSpecifiedStyle(element, '::before');
+var computedStyle = getComputedStyle(element, '::before');
 
-console.log(style.width);
-console.log(style2.width);
-
-console.log(document.styleSheets);
+console.log(spedifiedStyle.getPropertyValue('width'));
+console.log(computedStyle.getPropertyValue('width'));
