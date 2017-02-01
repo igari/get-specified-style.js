@@ -73,7 +73,7 @@
 "use strict";
 
 
-__webpack_require__(1);
+const SPECIFICITY = __webpack_require__(1);
 
 function XCSSStyleDeclaration() {}
 
