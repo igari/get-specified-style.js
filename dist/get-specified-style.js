@@ -89,53 +89,61 @@ XCSSStyleDeclaration.prototype.getPropertyPriority = function (property) {
 
 const GSS = {
 
-	getSpecifiedStyle: function (element, pseudo) {
+	init: function () {
 
-		this.element = element;
-
-		let pseudoMatch = pseudo && typeof pseudo === 'string' && pseudo.match(/(before|after)$/);
-		this.pseudo = pseudoMatch ? pseudoMatch[1] : false;
-
-		this.element.xstyle = Object.create(XCSSStyleDeclaration.prototype, {});
-
-		if(this.pseudo) {
-			this.element.xstyle[this.pseudo] = Object.create(XCSSStyleDeclaration.prototype, {});
+		let body = document.querySelector('body');
+		let allElements = body.querySelectorAll('*:not(script):not(input[type="hidden"])');
+		console.time('initialize')
+		for(let element of allElements) {
+			//console.count('get element')
+			this.initCustomStyle(element);
 		}
-
-		console.time('get specified style')
-
-		this.searchByStyleSheet();
-
-		console.timeEnd('get specified style')
-
-		return this.pseudo ? this.element.xstyle[this.pseudo] : this.element.xstyle;
+		console.timeEnd('initialize')
 	},
 
-	searchByStyleSheet: function () {
+	initCustomStyle: function (element) {
+		element.xstyle = element.xstyle || Object.create(XCSSStyleDeclaration.prototype, {});
+		element.xstyle.before = element.xstyle.before || Object.create(XCSSStyleDeclaration.prototype, {});
+		element.xstyle.after = element.xstyle.after || Object.create(XCSSStyleDeclaration.prototype, {});
+	},
+
+	getSpecifiedStyle: function (element, pseudo) {
+
+		let pseudoMatch = pseudo && typeof pseudo === 'string' && pseudo.trim().match(/(before|after)$/);
+
+		this.pseudo = pseudoMatch ? pseudoMatch[1] : false;
+
+		this.searchByStyleSheet(element);
+
+		return this.pseudo ? element.xstyle[this.pseudo] : element.xstyle;
+	},
+
+	searchByStyleSheet: function (element) {
 		var styleSheets = document.styleSheets;
 		for(let styleSheet of styleSheets) {
 			let cssRules = styleSheet.cssRules;
 			if(!cssRules) continue;
-			this.searchByCSSRule(cssRules);
+			this.searchByCSSRule(cssRules, element);
 		}
 	},
 
-	searchByCSSRule: function (cssRules) {
+	searchByCSSRule: function (cssRules, element) {
 		for(let cssRule of cssRules) {
+			//console.count('get css rule')
 
 			switch(cssRule.type) {
 				case CSSRule.STYLE_RULE:
 					break;
 				case CSSRule.SUPPORTS_RULE:
 					if(CSS.supports(cssRule.conditionText)) {
-						this.searchByCSSRule(cssRule.cssRules);
+						this.searchByCSSRule(cssRule.cssRules, element);
 					}
 					continue;
 				case CSSRule.MEDIA_RULE:
 					var mediaText = cssRule.media.mediaText;
 					var mediaQueryList = matchMedia(mediaText);
 					if(mediaQueryList.matches) {
-						this.searchByCSSRule(cssRule.cssRules);
+						this.searchByCSSRule(cssRule.cssRules, element);
 					}
 					continue;
 				default:
@@ -147,45 +155,49 @@ const GSS = {
 			let specificityObjArray = SPECIFICITY.calculate(selectorText);
 
 			for(let specificityObj of specificityObjArray) {
+				//console.count('get selector')
 
 				let regex = new RegExp('(.*)::(before|after)');
 				let pseudoSelectorMatch = specificityObj.selector.trim().match(regex);
 				let selector = pseudoSelectorMatch ? pseudoSelectorMatch[1] : specificityObj.selector;
 				let pseudoSelector = pseudoSelectorMatch && pseudoSelectorMatch[2] === this.pseudo ? pseudoSelectorMatch[2] : null;
 
-				if(this.element.matches(selector || '*')) {
+				if(element.matches(selector || '*')) {
 					let specificity = +specificityObj.specificity.replace(/,/g, '');
-					this.getStyle(styleFromCSSRule, specificity, pseudoSelector);
+					this.getStyle(element, styleFromCSSRule, specificity, pseudoSelector);
 					if(!pseudoSelector) {
-						let styleFromStyleAttr = this.element.style;
-						this.getStyle(styleFromStyleAttr, false);
+						let styleFromStyleAttr = element.style;
+						this.getStyle(element, styleFromStyleAttr, false);
 					}
 				}
 			}
 		}
 	},
-	getStyle: function (style, specificity, pseudoSelector) {
+	getStyle: function (element, style, specificity, pseudoSelector) {
 
 		for(let property of style) {
+			//console.count('get style')
 
 			let value = style.getPropertyValue(property);
 			let priority = style.getPropertyPriority(property);
 			let isFromCSSRule = specificity !== false;
 			specificity = isFromCSSRule ? (priority ? specificity + 1000 : specificity) : (priority ? 10000 : 1000);
-			this.saveStyle2Element(property, value, priority, specificity, pseudoSelector);
+			this.saveStyle2Element(element, property, value, priority, specificity, pseudoSelector);
 
 		}
 
 	},
-	saveStyle2Element: function(property, value, priority, specificity, pseudoSelector) {
+	saveStyle2Element: function(element, property, value, priority, specificity, pseudoSelector) {
 
-		this.element.xstyle[property] = this.element.xstyle[property] || {};
+		this.initCustomStyle(element);
 
-		let customStyle = this.element.xstyle[property];
+		element.xstyle[property] = element.xstyle[property] || {};
+
+		let customStyle = element.xstyle[property];
 
 		if(pseudoSelector) {
-			this.element.xstyle[pseudoSelector][property] = this.element.xstyle[pseudoSelector][property] || {};
-			customStyle = this.element.xstyle[pseudoSelector][property];
+			element.xstyle[pseudoSelector][property] = element.xstyle[pseudoSelector][property] || {};
+			customStyle = element.xstyle[pseudoSelector][property];
 		}
 
 		let hasProperty = Object.keys(customStyle).length > 0;
@@ -210,6 +222,10 @@ const GSS = {
 		customStyle.specificity = specificity;
 	}
 };
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	GSS.init();
+});
 
 window.getSpecifiedStyle = GSS.getSpecifiedStyle.bind(GSS);
 

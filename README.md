@@ -51,3 +51,7 @@ style.getPropertyPriority(propertyName);//'' or 'important'
 ```
 style.getSpecificity(propertyName);// 0~10000
 ```
+
+## Dependencies
+
+- [specificity](https://www.npmjs.com/package/specificity) - Calculate the specificity of a CSS selector
