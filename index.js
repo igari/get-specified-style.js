@@ -1,8 +1,3 @@
-'use strict';
+var getSpecifiedStyle = require('./dist/get-specified-style.js');
+module.exports = getSpecifiedStyle;
 
-var element = document.querySelector('div');
-var spedifiedStyle = getSpecifiedStyle(element, '::before');
-var computedStyle = getComputedStyle(element, '::before');
-
-console.log(spedifiedStyle.getPropertyValue('width'));
-console.log(computedStyle.getPropertyValue('width'));

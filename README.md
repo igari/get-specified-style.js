@@ -36,30 +36,3 @@ Exactly the same as [getComputedStyle](https://developer.mozilla.org/en/docs/Web
 ```
 getSpecifiedStyle(element[, pseudoElt]);
 ```
-
-## Example
-```css
-div {
-	width: auto !important;
-}
-```
-
-```html
-<div style="width: 100px;">hoge</div>
-<script src="/path/to/get-specified-style.js">
-<script>
-var div = document.querySelector('div');
-var style = getSpecifiedStyle(div);
-console.log(style);
-</script>
-```
-
-```json
-{
-	"width": {
-		"value": "400px",
-		"priority": "important",
-		"specificity": 1001
-	}
-}
-```
