@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha ./test/index.js",
-    "build": "./node_modules/.bin/webpack ./src/ ./dist/get-specified-style.js"
+    "build": "./node_modules/.bin/webpack ./src/index.js ./dist/get-specified-style.js"
   },
   "repository": {
     "type": "git",
