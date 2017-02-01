@@ -16,7 +16,8 @@ const GSS = {
 
 	getSpecifiedStyle: function (element, pseudo) {
 
-		this.pseudo = pseudo.match(/(before|after)$/)[1];
+		let pseudoMatch = pseudo.match(/(before|after)$/);
+		this.pseudo = pseudoMatch ? pseudoMatch[1] : false;
 
 		element.xstyle = Object.create(XCSSStyleDeclaration.prototype, {});
 
