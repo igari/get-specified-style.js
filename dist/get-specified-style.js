@@ -92,7 +92,7 @@ const GSS = {
 	init: function () {
 
 		let body = document.querySelector('body');
-		let allElements = body.querySelectorAll('*:not(script):not(input[type="hidden"])');
+		let allElements = body.querySelectorAll('*:not(script)');
 		console.time('initialize')
 		for(let element of allElements) {
 			//console.count('get element')
