@@ -7,6 +7,7 @@
 }
 div {
 	width: 100px;
+	margin-top: 10px;
 }
 div::before {
 	content: 'hoge';
