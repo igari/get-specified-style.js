@@ -31,7 +31,7 @@ console.log(computedStyle.getPropertyValue('width'));//1024px
 
 ## Usage
 
-Exactly the same as [getComputedStyle](https://developer.mozilla.org/en/docs/Web/API/Window/getComputedStyle)
+Almost the same as [getComputedStyle](https://developer.mozilla.org/en/docs/Web/API/Window/getComputedStyle)
 
 ```
 let style = getSpecifiedStyle(element[, pseudoElt]);
