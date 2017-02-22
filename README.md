@@ -24,7 +24,15 @@ console.log(computedStyle.getPropertyValue('width'));//1024px
 ```
 
 ## Installation
+```sh
+bower install get-specified-style.js
+```
+or
+```sh
+yarn add get-specified-style.js
+```
 
+### Load with script tag
 ```html
 <script src="/path/to/get-specified-style.js">
 ```
